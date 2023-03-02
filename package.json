@@ -1,5 +1,5 @@
 {
-  "name": "recordermoe",
+  "name": "open-graph-tag-builder",
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
@@ -14,7 +14,7 @@
   "author": "author",
   "license": "MIT",
   "devDependencies": {
-    "@cloudflare/workers-types": "^2.0.0",
+    "@cloudflare/workers-types": "^4.20230228.0",
     "@types/chai": "^4.2.11",
     "@types/mocha": "^7.0.2",
     "chai": "^4.2.0",

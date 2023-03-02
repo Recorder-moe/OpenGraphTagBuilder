@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy Cloudflare Worker
     steps:
-      - uses: actions/checkout@v2.0.0 
+      - uses: actions/checkout@v3 
       - name: install dependencies
         run: 'npm install'
       - name: deploy using wrangler 
@@ -19,4 +19,3 @@ jobs:
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}
           CLOUDFLARE_API_TOKEN: ${{secrets.CF_API_TOKEN}}
-          SOMEENV: ${{secrets.SOMEENV}}
