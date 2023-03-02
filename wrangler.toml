@@ -1,5 +1,5 @@
 # The name of your Worker. Alphanumeric values and dashes only.
-name = "worker-ts_template"
+name = "recordermoe"
 
 # The entrypoint/path to the file that will be executed.
 main = "./dist/worker.production.js"
