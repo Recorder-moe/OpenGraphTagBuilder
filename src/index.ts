@@ -17,6 +17,13 @@ async function handleRequest(request: Request): Promise<Response> {
     return response;
   }
 
+  let cache = caches.default;
+  let cacheResponse = await cache.match(request);
+  if (cacheResponse) {
+    console.log('Cache hit!');
+    return cacheResponse;
+  }
+
   let metaData: IMetaData = {
     Title: 'Recorder.moe - Never miss a Vtuber stream again',
     Description:
@@ -85,6 +92,7 @@ async function handleRequest(request: Request): Promise<Response> {
     });
 
   const newResponse = rewriter.transform(response);
+  await cache.put(request, newResponse.clone());
 
   return newResponse;
 }
