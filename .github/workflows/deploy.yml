@@ -21,3 +21,4 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{secrets.CF_API_TOKEN}}
           COSMOS_ENDPOINT: ${{secrets.COSMOS_ENDPOINT}}
           COSMOS_KEY: ${{secrets.COSMOS_KEY}}
+          BLOB_ENDPOINT_PUBLIC: ${{secrets.BLOB_ENDPOINT_PUBLIC}}

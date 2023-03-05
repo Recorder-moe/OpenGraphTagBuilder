@@ -5,16 +5,11 @@ addEventListener('fetch', (event: FetchEvent) => {
 });
 
 async function handleRequest(request: Request): Promise<Response> {
-  const urlString = request.url;
-  const matchResult = urlString.match(/^https?:\/\/[^\/]+(\/.*)$/);
-
-  const url = new URL('https://alpha.recorder.moe' + matchResult![1]);
-  // const response = await fetch(request);
-  const response = await fetch(url);
+  const url = new URL(request.url);
+  const response = await fetch(request);
   const headers = new Headers(response.headers);
 
   if (
-    url.pathname.startsWith('/api/') ||
     request.method !== 'GET' ||
     !response.ok ||
     !headers.get('content-type')?.includes('text/html')
@@ -45,35 +40,35 @@ async function handleRequest(request: Request): Promise<Response> {
       const videoId = path[4];
       // Video page
       temp = await prepareDataService.PrepareVideoMetadata(videoId, channelId);
-      temp.Description = `Hey, take a look at this awesome video archive on Recorder.moe!`;
     } else {
       // Channel page
       temp = await prepareDataService.PrepareChannelMetadata(channelId);
-      temp.Description = `Check out ${temp.Title}'s recordings on Recorder.moe!`;
     }
-    temp.Title = `Recorder.moe | ${temp.Title}}`;
+    console.log('temp', temp);
     metaData = { ...metaData, ...temp };
+    console.log('metaData', metaData);
   }
 
   const metaTags = `
     <title>${metaData.Title}</title>
-    <meta name="title" content="${metaData.Title}">
-    <meta name="description" content="${metaData.Description}">
+    <meta name=\"title\" content=\"${metaData.Title}\">
+    <meta name=\"description\" content=\"${metaData.Description}\">
 
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="${url}">
-    <meta property="og:title" content="${metaData.Title}">
-    <meta property="og:description" content="${metaData.Description}">
-    <meta property="og:image" content="${metaData.Thumbnail}">
+    <meta property=\"og:type\" content=\"website\">
+    <meta property=\"og:url\" content=\"${url}\">
+    <meta property=\"og:title\" content=\"${metaData.Title}\">
+    <meta property=\"og:description\" content=\"${metaData.Description}\">
+    <meta property=\"og:image\" content=\"${metaData.Thumbnail}\">
 
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="${url}">
-    <meta property="twitter:title" content="${metaData.Title}">
-    <meta property="twitter:description" content="${metaData.Description}">
-    <meta property="twitter:image" content="${metaData.Thumbnail}">
+    <meta property=\"twitter:card\" content=\"summary_large_image\">
+    <meta property=\"twitter:url\" content=\"${url}\">
+    <meta property=\"twitter:title\" content=\"${metaData.Title}\">
+    <meta property=\"twitter:description\" content=\"${metaData.Description}\">
+    <meta property=\"twitter:image\" content=\"${metaData.Thumbnail}\">
     `;
+  console.log(metaTags);
 
-  const newHtml = html.replace('<head>', `<head>${metaTags}`);
+  const newHtml = html.replace('</head>', `${metaTags}</head>`);
 
   return new Response(newHtml, {
     status: response.status,
