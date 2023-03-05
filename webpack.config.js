@@ -17,6 +17,7 @@ module.exports = {
     new webpack.EnvironmentPlugin({
       COSMOS_KEY: '',
       COSMOS_ENDPOINT: '',
+      BLOB_ENDPOINT_PUBLIC: '',
     }),
   ],
   module: {
