@@ -16,7 +16,11 @@ export class PrepareDataService {
     const video = await this.publicCosmosdbService.getVideoById(videoId, channelId);
     const channel = await this.publicCosmosdbService.getChannelById(channelId);
     let Description = `Hey, take a look at this awesome video archive on Recorder.moe!`;
-    if ((video.SourceStatus ?? 0) >= VideoStatus.Expired && video.Status === VideoStatus.Archived) {
+    if (
+      (video.SourceStatus ?? 0) >= VideoStatus.Expired &&
+      video.SourceStatus !== VideoStatus.Exist &&
+      video.Status === VideoStatus.Archived
+    ) {
       Description = "We've got your back! The video may be gone, but we've archived it for you.";
     }
     if (video.Status === VideoStatus.Expired) {
