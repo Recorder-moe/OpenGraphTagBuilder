@@ -92,7 +92,8 @@ async function handleRequest(request: Request): Promise<Response> {
     });
 
   const newResponse = rewriter.transform(response);
-  await cache.put(request, newResponse.clone());
+
+  if (response.status === 200) await cache.put(request, newResponse.clone());
 
   return newResponse;
 }
