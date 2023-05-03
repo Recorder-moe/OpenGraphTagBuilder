@@ -1,5 +1,6 @@
 import { IMetaData } from './Models/MetaData';
 import { PrepareDataService } from './Services/PrepareDataService';
+import { SitemapService } from './Services/SitemapService';
 addEventListener('fetch', (event: FetchEvent) => {
   event.respondWith(handleRequest(event.request));
 });
@@ -8,6 +9,16 @@ async function handleRequest(request: Request): Promise<Response> {
   const url = new URL(request.url);
   const response = await fetch(request);
   const headers = new Headers(response.headers);
+
+  if (url.pathname === '/sitemap.txt') {
+    const sitemapService = new SitemapService();
+    const sitemap = await sitemapService.GetSitemap(url.origin);
+    return new Response(sitemap, {
+      headers: {
+        'content-type': 'text/plain;charset=UTF-8',
+      },
+    });
+  }
 
   if (
     request.method !== 'GET' ||

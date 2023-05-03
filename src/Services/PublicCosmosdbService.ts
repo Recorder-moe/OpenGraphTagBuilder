@@ -40,4 +40,26 @@ export class PublicCosmosdbService {
     const results = await res.json();
     return results[0];
   }
+
+  async getVideoLists(): Promise<IVideo[]> {
+    const query = `SELECT v.id, v.ChannelId FROM Videos AS v WHERE v.Status >= 40 and v.Status < 50`;
+    const res = await this.cosmosClient.queryDocuments<IVideo>({
+      query,
+      collId: 'Videos',
+      dbId: 'Public',
+    });
+    const results = await res.json();
+    return results;
+  }
+
+  async getChannelLists(): Promise<IChannel[]> {
+    const query = `SELECT c.id FROM Channels AS c WHERE c.CanActive != false`;
+    const res = await this.cosmosClient.queryDocuments<IChannel>({
+      query,
+      collId: 'Channels',
+      dbId: 'Public',
+    });
+    const results = await res.json();
+    return results;
+  }
 }
