@@ -23,7 +23,11 @@ async function handleRequest(request: Request): Promise<Response> {
   if (
     request.method !== 'GET' ||
     !response.ok ||
-    !headers.get('content-type')?.includes('text/html')
+    !headers.get('content-type')?.includes('text/html') ||
+    url.pathname.endsWith('json') ||
+    url.pathname.endsWith('jsonc') ||
+    url.pathname.startsWith('/api') ||
+    url.pathname.startsWith('/assets')
   ) {
     return response;
   }
