@@ -42,7 +42,7 @@ export class PublicCosmosdbService {
   }
 
   async getVideoLists(): Promise<IVideo[]> {
-    const query = `SELECT v.id, v.ChannelId FROM Videos AS v WHERE v.Status >= 40 and v.Status < 50`;
+    const query = `SELECT v.id, v.ChannelId FROM Videos AS v`;
     const res = await this.cosmosClient.queryDocuments<IVideo>({
       query,
       collId: 'Videos',
@@ -53,7 +53,7 @@ export class PublicCosmosdbService {
   }
 
   async getChannelLists(): Promise<IChannel[]> {
-    const query = `SELECT c.id FROM Channels AS c WHERE c.CanActive != false`;
+    const query = `SELECT c.id FROM Channels AS c`;
     const res = await this.cosmosClient.queryDocuments<IChannel>({
       query,
       collId: 'Channels',
