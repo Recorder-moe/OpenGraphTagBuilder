@@ -43,7 +43,7 @@ async function handleRequest(request: Request): Promise<Response> {
     Title: 'Recorder.moe - Never miss a Vtuber stream again',
     Description:
       "Recorder.moe is a cool project that record Vtuber live streams on the fly. We're all about helping you capture those important moments in real time.",
-    Thumbnail: url.origin + '/assets/img/page.png',
+    Thumbnail: url.origin + '/assets/img/preview.png',
   };
 
   console.log(metaData);
