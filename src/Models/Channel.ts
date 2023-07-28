@@ -8,7 +8,10 @@ export class Channel implements IChannel {
   Avatar: string = '';
   Banner: string = '';
   LatestVideoId?: string;
-  SupportToken: number = 0;
+  Hide?: boolean;
+  UseCookiesFile?: boolean;
+  SkipNotLiveStream?: boolean;
+  AutoUpdateInfo?: boolean;
   Note?: string;
 }
 
@@ -20,7 +23,10 @@ export interface IChannel {
   Avatar: string;
   Banner: string;
   LatestVideoId?: string;
-  SupportToken: number;
+  Hide?: boolean;
+  UseCookiesFile?: boolean;
+  SkipNotLiveStream?: boolean;
+  AutoUpdateInfo?: boolean;
   Note?: string;
 }
 

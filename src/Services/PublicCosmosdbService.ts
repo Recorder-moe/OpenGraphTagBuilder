@@ -29,7 +29,7 @@ export class PublicCosmosdbService {
   }
 
   async getChannelById(id: string): Promise<IChannel> {
-    const query = `SELECT * FROM Channels WHERE Channels.id = @id`;
+    const query = `SELECT * FROM Channels AS c WHERE c.id = @id`;
     const parameters: QueryParameter[] = [{ name: '@id', value: id }];
     const res = await this.cosmosClient.queryDocuments<IChannel>({
       query,
@@ -53,7 +53,7 @@ export class PublicCosmosdbService {
   }
 
   async getChannelLists(): Promise<IChannel[]> {
-    const query = `SELECT c.id FROM Channels AS c`;
+    const query = `SELECT c.id, c.Hide FROM Channels AS c`;
     const res = await this.cosmosClient.queryDocuments<IChannel>({
       query,
       collId: 'Channels',
