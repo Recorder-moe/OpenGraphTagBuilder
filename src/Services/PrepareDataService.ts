@@ -48,7 +48,7 @@ export class PrepareDataService {
     }
 
     return {
-      Title: `Recorder.moe | ${video.Title} | ${channel.ChannelName}`,
+      Title: `Recorder.moe | ${video.Title} | ${channel?.ChannelName ?? channelId}`,
       Description,
       Thumbnail: `${BLOB_ENDPOINT_PUBLIC}thumbnails/${video.Thumbnail}`,
     };
@@ -56,6 +56,12 @@ export class PrepareDataService {
 
   async PrepareChannelMetadata(channelId: string): Promise<IMetaData> {
     const channel = await this.publicCosmosdbService.getChannelById(channelId);
+    if (!channel)
+      return {
+        Title: `Recorder.moe | ${channelId}`,
+        Description: 'Oops, this channel is not available on Recorder.moe.😥',
+        Thumbnail: undefined,
+      };
     const { ChannelName, Monitoring } = channel;
 
     const messages = {

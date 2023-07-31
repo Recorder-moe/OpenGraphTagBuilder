@@ -28,7 +28,7 @@ export class PublicCosmosdbService {
     return res.json();
   }
 
-  async getChannelById(id: string): Promise<IChannel> {
+  async getChannelById(id: string): Promise<IChannel | null> {
     const query = `SELECT * FROM Channels AS c WHERE c.id = @id`;
     const parameters: QueryParameter[] = [{ name: '@id', value: id }];
     const res = await this.cosmosClient.queryDocuments<IChannel>({
@@ -38,7 +38,7 @@ export class PublicCosmosdbService {
       dbId: 'Public',
     });
     const results = await res.json();
-    return results[0];
+    return results.length > 0 ? results[0] : null;
   }
 
   async getVideoLists(): Promise<IVideo[]> {
