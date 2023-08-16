@@ -2,19 +2,21 @@ import { VideoStatus } from './../enum/VideoStatus';
 declare const process: any;
 const BLOB_ENDPOINT_PUBLIC: string = process.env.BLOB_ENDPOINT_PUBLIC;
 
-import { PublicCosmosdbService } from './PublicCosmosdbService';
 import { IMetaData } from '../Models/MetaData';
+import { IDBService } from '../interface/IDBService';
+import { IDBServiceProvider } from '../provider/IDBServiceProvider';
 
 export class PrepareDataService {
-  publicCosmosdbService: PublicCosmosdbService;
+  dbService: IDBService;
 
   constructor() {
-    this.publicCosmosdbService = new PublicCosmosdbService();
+    this.dbService = IDBServiceProvider.getDBService();
   }
 
   async PrepareVideoMetadata(videoId: string, channelId: string): Promise<IMetaData> {
-    const video = await this.publicCosmosdbService.getVideoById(videoId, channelId);
-    const channel = await this.publicCosmosdbService.getChannelById(channelId);
+    const video = await this.dbService.getVideoById(videoId, channelId);
+    const channel = await this.dbService.getChannelById(channelId);
+    if (!video) throw new Error(`Video ${videoId} not found.`);
 
     const { SourceStatus, Status } = video;
     const sourceNotExist =
@@ -55,7 +57,7 @@ export class PrepareDataService {
   }
 
   async PrepareChannelMetadata(channelId: string): Promise<IMetaData> {
-    const channel = await this.publicCosmosdbService.getChannelById(channelId);
+    const channel = await this.dbService.getChannelById(channelId);
     if (!channel)
       return {
         Title: `Recorder.moe | ${channelId}`,

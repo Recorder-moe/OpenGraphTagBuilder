@@ -4,11 +4,12 @@ const COSMOS_ENDPOINT: string = process.env.COSMOS_ENDPOINT;
 
 import { CosmosClient } from '@cfworker/cosmos';
 import { QueryParameter } from '@cfworker/cosmos/dist/client';
-import { IChannel } from '../Models/Channel';
-import { IVideo } from '../Models/Video';
+import { IChannel } from '../../Models/Channel';
+import { IVideo } from '../../Models/Video';
+import { IDBService } from '../../interface/IDBService';
 
-export class PublicCosmosdbService {
-  cosmosClient: CosmosClient;
+export class CosmosDBService implements IDBService {
+  private cosmosClient: CosmosClient;
 
   constructor() {
     this.cosmosClient = new CosmosClient({
@@ -17,10 +18,10 @@ export class PublicCosmosdbService {
     });
   }
 
-  async getVideoById(docId: string, partitionKey: string): Promise<IVideo> {
-    console.log(`getVideoById: ${docId}, ${partitionKey}`);
+  async getVideoById(id: string, partitionKey: string): Promise<IVideo | undefined> {
+    console.log(`getVideoById: ${id}, ${partitionKey}`);
     const res = await this.cosmosClient.getDocument<IVideo>({
-      docId,
+      docId: id,
       partitionKey,
       collId: 'Videos',
       dbId: 'Public',
@@ -28,7 +29,7 @@ export class PublicCosmosdbService {
     return res.json();
   }
 
-  async getChannelById(id: string): Promise<IChannel | null> {
+  async getChannelById(id: string): Promise<IChannel | undefined> {
     const query = `SELECT * FROM Channels AS c WHERE c.id = @id`;
     const parameters: QueryParameter[] = [{ name: '@id', value: id }];
     const res = await this.cosmosClient.queryDocuments<IChannel>({
@@ -38,7 +39,7 @@ export class PublicCosmosdbService {
       dbId: 'Public',
     });
     const results = await res.json();
-    return results.length > 0 ? results[0] : null;
+    return results.length > 0 ? results[0] : undefined;
   }
 
   async getVideoLists(): Promise<IVideo[]> {

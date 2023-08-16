@@ -1,19 +1,20 @@
-import { PublicCosmosdbService } from './PublicCosmosdbService';
+import { IDBService } from '../interface/IDBService';
+import { IDBServiceProvider } from '../provider/IDBServiceProvider';
 
 export class SitemapService {
-  publicCosmosdbService: PublicCosmosdbService;
+  dbService: IDBService;
 
   constructor() {
-    this.publicCosmosdbService = new PublicCosmosdbService();
+    this.dbService = IDBServiceProvider.getDBService();
   }
 
   async GetSitemap(origin: string): Promise<string> {
     console.log('Start to generate sitemap');
-    let channels = await this.publicCosmosdbService.getChannelLists();
+    let channels = await this.dbService.getChannelLists();
     channels = channels.filter((channel) => channel.Hide !== true);
     console.log('Get channels', channels);
 
-    let videos = await this.publicCosmosdbService.getVideoLists();
+    let videos = await this.dbService.getVideoLists();
     videos = videos.filter((video) => channels.some((channel) => channel.id === video.ChannelId));
     console.log('Get videos', videos);
 
