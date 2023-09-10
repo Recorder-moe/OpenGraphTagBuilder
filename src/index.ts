@@ -56,10 +56,24 @@ async function handleRequest(request: Request): Promise<Response> {
     if (url.pathname.includes('/videos/')) {
       const videoId = path[4];
       // Video page
-      temp = await prepareDataService.PrepareVideoMetadata(videoId, channelId);
+      try {
+        temp = await prepareDataService.PrepareVideoMetadata(videoId, channelId);
+      } catch (e) {
+        console.error(e);
+
+        // Redirect to channel page if video not found
+        return Response.redirect(`${url.origin}/channels/${channelId}`, 301);
+      }
     } else {
       // Channel page
-      temp = await prepareDataService.PrepareChannelMetadata(channelId);
+      try {
+        temp = await prepareDataService.PrepareChannelMetadata(channelId);
+      } catch (e) {
+        console.error(e);
+
+        // Redirect to home page if channel not found
+        return Response.redirect(`${url.origin}`, 301);
+      }
     }
     console.log('temp', temp);
     metaData = { ...metaData, ...temp };

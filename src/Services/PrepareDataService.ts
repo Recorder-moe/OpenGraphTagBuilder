@@ -58,12 +58,8 @@ export class PrepareDataService {
 
   async PrepareChannelMetadata(channelId: string): Promise<IMetaData> {
     const channel = await this.dbService.getChannelById(channelId);
-    if (!channel)
-      return {
-        Title: `Recorder.moe | ${channelId}`,
-        Description: 'Oops, this channel is not available on Recorder.moe.😥',
-        Thumbnail: undefined,
-      };
+    if (!channel) throw new Error(`Channel ${channelId} not found.`);
+
     const { ChannelName, Monitoring } = channel;
 
     const messages = {

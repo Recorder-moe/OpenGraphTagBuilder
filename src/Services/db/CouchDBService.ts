@@ -52,25 +52,35 @@ export class CouchDBService implements IDBService {
   }
 
   async getVideoById(id: string, partitionKey: string): Promise<IVideo | undefined> {
-    const video = await this.videosDatabase.get<IVideo>(`${partitionKey}:${id}`, {
-      latest: true,
-    });
-    if (video) video.id = video._id.split(':').pop()!;
-    return video as IVideo | undefined;
+    try {
+      const video = await this.videosDatabase.get<IVideo>(`${partitionKey}:${id}`, {
+        latest: true,
+      });
+      if (video) video.id = video._id.split(':').pop()!;
+      return video as IVideo;
+    } catch (e) {
+      console.error(e);
+      return undefined;
+    }
   }
 
   async getChannelById(id: string): Promise<IChannel | undefined> {
-    // Find a channel which '_id' ends with the given id
-    const response = (await this.channelDatabase.find({
-      selector: {
-        _id: { $regex: `:${id}$` },
-      },
-      limit: 1,
-    })) as PouchDB.Find.FindResponse<IChannel>;
-    const channel = response.docs.shift();
+    try {
+      // Find a channel which '_id' ends with the given id
+      const response = (await this.channelDatabase.find({
+        selector: {
+          _id: { $regex: `:${id}$` },
+        },
+        limit: 1,
+      })) as PouchDB.Find.FindResponse<IChannel>;
+      const channel = response.docs.shift();
 
-    if (channel) channel.id = channel._id.split(':').pop()!;
-    return channel as IChannel | undefined;
+      if (channel) channel.id = channel._id.split(':').pop()!;
+      return channel as IChannel | undefined;
+    } catch (e) {
+      console.error(e);
+      return undefined;
+    }
   }
 
   async getVideoLists(): Promise<IVideo[]> {
