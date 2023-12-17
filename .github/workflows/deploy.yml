@@ -11,14 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy Cloudflare Worker
     steps:
-      - uses: actions/checkout@v3 
-      - name: install dependencies
-        run: 'npm install'
-      - name: deploy using wrangler 
-        run: 'npx wrangler publish'
+      - uses: actions/checkout@v4
+      - name: Deploy Cloudflare Worker
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
         env:
-          CLOUDFLARE_ACCOUNT_ID: ${{secrets.CF_ACCOUNT_ID}}
-          CLOUDFLARE_API_TOKEN: ${{secrets.CF_API_TOKEN}}
           DATABASE_SERVICE: ${{secrets.DATABASE_SERVICE}}
           COSMOS_KEY: ${{secrets.COSMOS_KEY}}
           COSMOS_ENDPOINT: ${{secrets.COSMOS_ENDPOINT}}
