@@ -1,31 +1,40 @@
-# Cloudflare worker TS Template
+# Open Graph Tag Builder (Cloudflare Worker with GitHub CI/CD)
 
-## 說明
+查詢資料庫並動態產生 Open Graph 資訊和 Sitemap，提供外部預覧和搜索引擎爬蟲使用。使用 GitHub CI 部屬至Cloudflare。
 
-在push至repo後，使用Github Action部屬至Cloudflare\
-所有參數以Github Secrets管理，可在code中以環境變數存取，[範例](src/handler.ts#L2)
+## Setup
 
-## 設定
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/Recorder-moe/OpenGraphTagBuilder)
 
-1. 參閱[Worker手冊](https://developers.cloudflare.com/workers/learning/getting-started)，直至可以建立一般的線上worker\
-(Wrangler cli為非必要，但這可以讓你先在本機build過，且tail指令可以接上deployed worker收log)
-1. 在github repo中設定以下secrets
-   1. CF_ACCOUNT_ID: 由你的Cloudflare Account Home→Workers的右側找到，[或是從wangler cli取得](https://developers.cloudflare.com/workers/learning/getting-started#6-preview-your-project)
-   1. CF_API_TOKEN: 由你的Cloudflare Profile→API Token→Create Token產生，[參照說明](https://developers.cloudflare.com/api/tokens/create/)
-   1. SOMEENV: 其它Secrets，在此專案中搜尋 `SOMEENV` 以尋找範例和修改處
-1. git push to master branch觸發Github Action，建立worker
-1. 至Cloudflare Worker設定route
+GitHub repository secrets
 
-## 參考資料
+- DATABASE_SERVICE: `COUCHDB` or `COSMOSDB`
+- COSMOS_KEY: CosmosDB readonly key
+- COSMOS_ENDPOINT: Public CosmosDB endpoint. (ex: `https://myaccount.documents.azure.com:443/`)
+- COUCH_ENDPOINT: CouchDB endpoint with readonly username:password. (ex: `https://username:password@couchdb.recorder.moe/` ← trailing slash is required)
+- BLOB_ENDPOINT_PUBLIC: Public Blob Storage endpoint. Get this from where your public thumbnail images can be accessed. (ex: [This is a image url](https://s3.recorder.moe/livestream-recorder-public/thumbnails/YQ5AlJwVaStk.avif) from our demo site, and this is the setting used here: `https://s3.recorder.moe/livestream-recorder-public/` ← trailing slash is required)
+
+## References
 
 ### Cloudflare Workers documentation
 
 <https://developers.cloudflare.com/workers/>
 
-### Hello World (TypeScript)
+### Azure Cosmos DB client for Cloudflare Workers
 
-<https://github.com/cloudflare/worker-typescript-template>
+<https://www.npmjs.com/package/@cfworker/cosmos>
 
-### Set Up Github Actions: Deploy to Cloudflare Worker
+## LICENSE
 
-<https://www.serviops.ca/a-full-ci-cd-pipeline-for-cloudflare-workers-with-github-actions/>
+> [!WARNING]  
+> This *Open Graph Tag Builder* project is licensed under AGPLv3, means that you ***MUST*** open source your project to your *end user* (who can access the website processed by this worker) when you are using this project or using any code from this project. **You can publicly fork this project and provide a link to your repository when users ask for it.**
+
+<img src="https://github.com/Recorder-moe/OpenGraphTagBuilder/assets/16995691/6234ae4e-8d5f-4d06-b716-2cdadeb5da21" alt="open graph" width="200" />
+
+[GNU AFFERO GENERAL PUBLIC LICENSE Version 3](LICENSE)
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.

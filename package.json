@@ -13,7 +13,7 @@
     "transpile": "tsc --project ./test"
   },
   "author": "author",
-  "license": "MIT",
+  "license": "AGPLv3",
   "private": true,
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20230228.0",
